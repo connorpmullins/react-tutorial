@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person';
+import classes from './App.css';
+import Cockpit from '../components/Cockpit/Cockpit';
+// import Person from '../components/Persons/Person/Person';
+import Persons from '../components/Persons/Persons';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log('[App.js] Inside Constructor', props);
+  }
+
+  componentWillMount() {
+    console.log('[App.js] Inside componentWillMount()');
+  }
+
+  componentDidMount() {
+    console.log('[App.js] inside componentDidMount()');
+  }
 
   state = {
     persons: [
@@ -46,53 +60,25 @@ class App extends Component {
   }
 
   render() {
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      cursor: 'pointer',
-      padding: '8px',
-    };
+    console.log('[App.js] inside Render');
 
     let persons = null;
 
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              changed = {(event) => this.nameChangeHandler(event, person.id)}
-              click = {() => this.deletePersonHandler(index)}
-              name = {person.name}
-              age = {person.age}
-              key = {person.id}
-            />
-          })}
-        </div>
-      );
-      style.backgroundColor = 'red';
-      style.color = 'black';
-    }
-
-    const classes = [];
-    if(this.state.persons.length <= 2) {
-      classes.push('red');
-    }
-    if (this.state.persons.length <= 1) {
-      classes.push('bold');
+      persons = <Persons
+        persons={this.state.persons}
+        clicked={this.deletePersonHandler}
+        changed={this.nameChangeHandler} />;
     }
 
     return (
-      <div className="App">
-        <h1> Hi, I'm a react app </h1>
-        <p className={classes.join(' ')}> This is working well!</p>
-        <button
-          onClick={this.togglePersonsHandler}
-          style = {style}
-        >
-          Toggle Peoples
-        </button>
+      <div className={classes.App}>
+        <Cockpit
+          title={this.props.title}
+          clicked={this.togglePersonsHandler}
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+        />
         {persons}
       </div>
     );
